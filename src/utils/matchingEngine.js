@@ -1,5 +1,4 @@
 // Simple TF-IDF + Cosine Similarity matching engine
-// Works entirely in the browser without external dependencies
 
 class MatchingEngine {
   constructor() {
@@ -8,7 +7,6 @@ class MatchingEngine {
     this.idf = {};
   }
 
-  // Tokenize and normalize text
   tokenize(text) {
     if (!text) return [];
     return text
@@ -18,7 +16,6 @@ class MatchingEngine {
       .filter(word => word.length > 2);
   }
 
-  // Build vocabulary from all documents
   buildVocabulary(documents) {
     this.vocabulary = new Set();
     documents.forEach(doc => {
@@ -59,7 +56,7 @@ class MatchingEngine {
     return vector;
   }
 
-  // Calculate cosine similarity between two vectors
+  // cosine similarity
   cosineSimilarity(vec1, vec2) {
     let dotProduct = 0;
     let norm1 = 0;
@@ -75,9 +72,9 @@ class MatchingEngine {
     return dotProduct / (Math.sqrt(norm1) * Math.sqrt(norm2));
   }
 
-  // Initialize with product data
+
   initialize(products) {
-    // Create searchable text for each product
+
     this.documents = products.map(product => {
       return [
         product.name,
@@ -95,11 +92,11 @@ class MatchingEngine {
     this.buildVocabulary(this.documents);
     this.calculateIDF(this.documents);
     
-    // Pre-calculate TF-IDF vectors for all products
+
     this.productVectors = this.documents.map(doc => this.calculateTFIDF(doc));
   }
 
-  // Find matching products for a query
+
   findMatches(query, products, topK = 5) {
     const queryVector = this.calculateTFIDF(query);
     
@@ -111,7 +108,7 @@ class MatchingEngine {
       };
     });
     
-    // Sort by score (descending) and take top K
+    // Sort by descending score and take top K
     const topMatches = scores
       .sort((a, b) => b.score - a.score)
       .slice(0, topK)
@@ -124,7 +121,7 @@ class MatchingEngine {
     }));
   }
 
-  // Generate explanation for why a product matched
+
   generateExplanation(query, product) {
     const queryTokens = this.tokenize(query);
     const productText = [
@@ -139,7 +136,7 @@ class MatchingEngine {
     
     const matchedAttributes = [];
     
-    // Check for thickness match
+
     if (queryTokens.some(t => t.includes('mm') || /^\d+$/.test(t))) {
       const thicknessMatch = queryTokens.find(t => 
         productText.includes(t) || (t.includes('mm') && productText.includes(t.replace('mm', '')))
@@ -151,7 +148,7 @@ class MatchingEngine {
       }
     }
     
-    // Check for color match
+
     const colors = ['clear', 'tint', 'bronze', 'frosted', 'reflective', 'white'];
     const colorMatch = colors.find(c => queryTokens.includes(c) && productText.includes(c));
     if (colorMatch) {
@@ -160,7 +157,7 @@ class MatchingEngine {
       matchedAttributes.push(product.color);
     }
     
-    // Check for coating match
+
     const coatings = ['uv', 'low-e', 'solar', 'reflective', 'coated'];
     const coatingMatch = coatings.find(c => queryTokens.includes(c) && productText.includes(c));
     if (coatingMatch) {
@@ -169,7 +166,7 @@ class MatchingEngine {
       matchedAttributes.push(product.coating);
     }
     
-    // Check for edge finish match
+
     const edges = ['polished', 'flat', 'raw', 'sealed'];
     const edgeMatch = edges.find(e => queryTokens.includes(e) && productText.includes(e));
     if (edgeMatch) {
@@ -178,7 +175,7 @@ class MatchingEngine {
       matchedAttributes.push(`${product.edgeFinish} edge finish`);
     }
     
-    // Check for application match
+
     const applications = {
       'partition': 'partitions',
       'balcony': 'balcony',
@@ -201,19 +198,19 @@ class MatchingEngine {
       }
     });
     
-    // Check for budget/cost match
+
     if (queryTokens.includes('budget') || queryTokens.includes('cheap') || queryTokens.includes('affordable')) {
       if (product.price < 50) {
         matchedAttributes.push('budget-friendly');
       }
     }
     
-    // If no specific matches found, provide category match
+
     if (matchedAttributes.length === 0) {
       matchedAttributes.push(product.category);
     }
     
-    // Generate explanation
+
     if (matchedAttributes.length === 0) {
       return `Matches based on general similarity to your query`;
     }
