@@ -12,7 +12,7 @@ A minimal working prototype of an intelligent product matching system for the gl
 
 1. **Clone the repository**
    ```bash
-   git clone <your-repo-url>
+   git clone [<your-repo-url>](https://github.com/Dhruv-2403/Amalgus_Assignment)
    cd Amalgus_Assignment
    ```
 
