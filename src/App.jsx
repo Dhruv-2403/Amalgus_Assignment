@@ -10,15 +10,14 @@ function App() {
   const [maxPrice, setMaxPrice] = useState('')
   const [matchingEngine] = useState(() => new MatchingEngine())
 
-  // Initialize matching engine with products
   useEffect(() => {
     matchingEngine.initialize(products)
-  }, [matchingEngine])
+  }, [])
 
-  // Get unique categories
+  // unique categories
   const categories = ['all', ...new Set(products.map(p => p.category))]
 
-  // Filter products based on selected filters
+  // used for filtering products
   const getFilteredProducts = () => {
     let filtered = [...products]
     
@@ -33,14 +32,13 @@ function App() {
     return filtered
   }
 
-  // Handle search
   const handleSearch = (e) => {
     e.preventDefault()
     if (!query.trim()) return
 
     setIsSearching(true)
 
-    // Simulate processing delay for better UX
+
     setTimeout(() => {
       const filteredProducts = getFilteredProducts()
       const results = matchingEngine.findMatches(query, filteredProducts, 5)
@@ -84,14 +82,14 @@ function App() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-8">
-        {/* Search Section */}
+
         <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
           <h2 className="text-2xl font-semibold text-gray-800 mb-6">
             Describe Your Requirements
           </h2>
           
           <form onSubmit={handleSearch} className="space-y-6">
-            {/* Query Input */}
+  
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 What are you looking for?
@@ -105,7 +103,7 @@ function App() {
               />
             </div>
 
-            {/* Filters */}
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -138,7 +136,7 @@ function App() {
               </div>
             </div>
 
-            {/* Submit Button */}
+    
             <button
               type="submit"
               disabled={!query.trim() || isSearching}
@@ -148,7 +146,7 @@ function App() {
             </button>
           </form>
 
-          {/* Example Queries */}
+
           <div className="mt-6 pt-6 border-t border-gray-200">
             <p className="text-sm text-gray-600 mb-3">Try these example queries:</p>
             <div className="flex flex-wrap gap-2">
@@ -165,7 +163,7 @@ function App() {
           </div>
         </div>
 
-        {/* Results Section */}
+
         {matches.length > 0 && (
           <div className="space-y-6">
             <h3 className="text-xl font-semibold text-gray-800">
@@ -178,7 +176,7 @@ function App() {
                   key={product.id}
                   className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow"
                 >
-                  {/* Match Score Badge */}
+
                   <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium text-gray-600">
@@ -198,7 +196,7 @@ function App() {
                     </div>
                   </div>
 
-                  {/* Product Details */}
+
                   <div className="p-4">
                     <h4 className="font-semibold text-gray-900 mb-2">
                       {product.name}
@@ -225,19 +223,19 @@ function App() {
                       </div>
                     </div>
 
-                    {/* Match Explanation */}
+   
                     <div className="bg-indigo-50 rounded-lg p-3 mb-4">
                       <p className="text-xs text-indigo-800">
                         <strong>Why this matches:</strong> {product.matchExplanation}
                       </p>
                     </div>
 
-                    {/* Description */}
+   
                     <p className="text-sm text-gray-600 mb-4 line-clamp-3">
                       {product.description}
                     </p>
 
-                    {/* Supplier */}
+
                     <div className="flex items-center justify-between pt-3 border-t border-gray-100">
                       <span className="text-xs text-gray-500">
                         Supplier: {product.supplier}
@@ -253,7 +251,7 @@ function App() {
           </div>
         )}
 
-        {/* No Results */}
+
         {matches.length === 0 && query && !isSearching && (
           <div className="bg-white rounded-xl shadow-md p-8 text-center">
             <p className="text-gray-500">
@@ -263,7 +261,7 @@ function App() {
         )}
       </main>
 
-      {/* Footer */}
+
       <footer className="bg-white border-t border-gray-200 mt-12">
         <div className="max-w-7xl mx-auto px-4 py-6 text-center text-sm text-gray-500">
           <p>AmalGus Smart Product Discovery Prototype</p>
